@@ -1,5 +1,5 @@
 export const waitForElement = (selector, fun) => {
-	selector = selector.split(',');
+	selector = selector.split(",");
 	let done = true;
 	for (const s of selector) {
 		if (!document.querySelector(s)) {
@@ -26,33 +26,33 @@ export const waitForElement = (selector, fun) => {
 			}
 		}
 	}, 100);
-}
+};
 export const waitForElementAsync = async (selector) => {
 	if (document.querySelector(selector)) {
 		return document.querySelector(selector);
 	}
 	return await betterncm.utils.waitForElement(selector);
-}
-export const getSetting = (option, defaultValue = '') => {
-	if (option.endsWith('-fm')) {
-		option = option.replace(/-fm$/, '');
+};
+export const getSetting = (option, defaultValue = "") => {
+	if (option.endsWith("-fm")) {
+		option = option.replace(/-fm$/, "");
 	}
 	option = "refined-now-playing-" + option;
 	let value = localStorage.getItem(option);
 	if (!value) {
 		value = defaultValue;
 	}
-	if (value === 'true') {
+	if (value === "true") {
 		value = true;
-	} else if (value === 'false') {
+	} else if (value === "false") {
 		value = false;
 	}
 	return value;
-}
+};
 export const setSetting = (option, value) => {
 	option = "refined-now-playing-" + option;
 	localStorage.setItem(option, value);
-}
+};
 export const chunk = (input, size) => {
 	return input.reduce((arr, item, idx) => {
 		return idx % size === 0
@@ -61,18 +61,18 @@ export const chunk = (input, size) => {
 	}, []);
 };
 export const copyTextToClipboard = (text) => {
-	const textarea = document.createElement('textarea');
-	textarea.style.position = 'fixed';
-	textarea.style.top = '0';
-	textarea.style.left = '0';
-	textarea.style.opacity = '0';
-	textarea.style.pointerEvents = 'none';
+	const textarea = document.createElement("textarea");
+	textarea.style.position = "fixed";
+	textarea.style.top = "0";
+	textarea.style.left = "0";
+	textarea.style.opacity = "0";
+	textarea.style.pointerEvents = "none";
 	textarea.value = text;
 	document.body.appendChild(textarea);
 	textarea.select();
-	document.execCommand('copy', true);
+	document.execCommand("copy", true);
 	document.body.removeChild(textarea);
-}
+};
 export const cyrb53 = (str, seed = 0) => {
 	let h1 = 0xdeadbeef ^ seed,
 		h2 = 0x41c6ce57 ^ seed;
@@ -82,8 +82,12 @@ export const cyrb53 = (str, seed = 0) => {
 		h2 = Math.imul(h2 ^ ch, 1597334677);
 	}
 
-	h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-	h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+	h1 =
+		Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^
+		Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+	h2 =
+		Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^
+		Math.imul(h1 ^ (h1 >>> 13), 3266489909);
 
 	return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };

@@ -31,7 +31,6 @@ export interface LyricPureLine {
 	unsynced?: boolean;
 }
 
-
 export const PURE_MUSIC_LYRIC_LINE = [
 	{
 		time: 0,
@@ -53,11 +52,10 @@ export const PURE_MUSIC_LYRIC_DATA = {
 	briefDesc: null,
 };
 
-
 const simularityCache: Record<string, number> = {};
 function calcSimularity(a: string, b: string) {
-	if (typeof(a) === "undefined") a = "";
-	if (typeof(b) === "undefined") b = "";
+	if (typeof a === "undefined") a = "";
+	if (typeof b === "undefined") b = "";
 	const key = `${a}::${b}`;
 	if (simularityCache[key] !== undefined) {
 		return simularityCache[key];
@@ -77,31 +75,35 @@ function calcSimularity(a: string, b: string) {
 			if (a[i - 1] === b[j - 1]) {
 				d[i][j] = d[i - 1][j - 1];
 			} else {
-				d[i][j] = Math.min(d[i - 1][j - 1] + 1, d[i][j - 1] + 1, d[i - 1][j] + 1);
+				d[i][j] = Math.min(
+					d[i - 1][j - 1] + 1,
+					d[i][j - 1] + 1,
+					d[i - 1][j] + 1,
+				);
 			}
 		}
 	}
 	return d[m][n];
 }
 
-
 const isEnglishSentense = (str: string) => {
-	if (str.replace(/[\p{P}\p{S}]/gu, '').match(/^[\s\w\u00C0-\u024F]+$/u)) {
+	if (str.replace(/[\p{P}\p{S}]/gu, "").match(/^[\s\w\u00C0-\u024F]+$/u)) {
 		return true;
 	}
 	return false;
-}
+};
 const replaceChineseSymbolsToEnglish = (str: string) => {
-	return str.replace(/[‘’′]/g, '\'')
-			 .replace(/[“”″]/g, '"')
-			 .replace(/（/g, '(')
-			 .replace(/）/g, ')')
-			 .replace(/，/g, ',')
-			 .replace(/！/g, '!')
-			 .replace(/？/g, '?')
-			 .replace(/：/g, ':')
-			 .replace(/；/g, ';');
-}
+	return str
+		.replace(/[‘’′]/g, "'")
+		.replace(/[“”″]/g, '"')
+		.replace(/（/g, "(")
+		.replace(/）/g, ")")
+		.replace(/，/g, ",")
+		.replace(/！/g, "!")
+		.replace(/？/g, "?")
+		.replace(/：/g, ":")
+		.replace(/；/g, ";");
+};
 
 export function parseLyric(
 	original: string,
@@ -152,22 +154,24 @@ export function parseLyric(
 		const originalLyrics = parsePureLyric(original);
 
 		const attachOriginalLyric = (lyric: LyricPureLine[]) => {
-			let attachMatchingMode = 'equal';
+			let attachMatchingMode = "equal";
 
 			const lyricTimeSet = new Set(lyric.map((v) => v.time));
 			const originalLyricTimeSet = new Set(originalLyrics.map((v) => v.time));
-			const intersection = new Set([...lyricTimeSet].filter((v) => originalLyricTimeSet.has(v)));
+			const intersection = new Set(
+				[...lyricTimeSet].filter((v) => originalLyricTimeSet.has(v)),
+			);
 			if (intersection.size / lyricTimeSet.size < 0.1) {
-				attachMatchingMode = 'closest';
+				attachMatchingMode = "closest";
 			}
 
 			//console.log(JSON.parse(JSON.stringify(originalLyrics)), JSON.parse(JSON.stringify(lyric)));
 			originalLyrics.forEach((line) => {
 				//let target = findLast(lyric, (v) => v.time === line.time);
 				let target: LyricPureLine | null = null;
-				if (attachMatchingMode === 'equal') {
+				if (attachMatchingMode === "equal") {
 					//target = findLast(lyric, (v) => v.time === line.time);
-					target = findLast(lyric, (v) => Math.abs(v.time - line.time) < 20)
+					target = findLast(lyric, (v) => Math.abs(v.time - line.time) < 20);
 				} else {
 					lyric.forEach((v) => {
 						if (target) {
@@ -181,7 +185,7 @@ export function parseLyric(
 						}
 					});
 				}
-					
+
 				//console.log(line, target);
 				/*if (!target) {
 					lyric.forEach((v) => {
@@ -206,13 +210,14 @@ export function parseLyric(
 			});
 			//console.log(JSON.parse(JSON.stringify(originalLyrics)), JSON.parse(JSON.stringify(lyric)));
 			return lyric;
-		}
+		};
 		const attachLyricToDynamic = (lyric: LyricPureLine[], field: string) => {
 			lyric.forEach((line, index) => {
 				let targetIndex = 0;
 				processed.forEach((v, index) => {
 					if (
-						Math.abs(processed[targetIndex].time - line.time) > Math.abs(v.time - line.time)
+						Math.abs(processed[targetIndex].time - line.time) >
+						Math.abs(v.time - line.time)
 					) {
 						targetIndex = index;
 					}
@@ -221,15 +226,16 @@ export function parseLyric(
 				let sequence = [targetIndex];
 				for (let offset = 1; offset <= 5; offset++) {
 					if (targetIndex - offset >= 0) sequence.push(targetIndex - offset);
-					if (targetIndex + offset < processed.length) sequence.push(targetIndex + offset);
-				}/*
+					if (targetIndex + offset < processed.length)
+						sequence.push(targetIndex + offset);
+				} /*
 				if (targetIndex - 1 >= 0) sequence.push(targetIndex - 1);
 				if (targetIndex + 1 < processed.length) sequence.push(targetIndex + 1);
 				if (targetIndex - 2 >= 0) sequence.push(targetIndex - 2);
 				if (targetIndex + 2 < processed.length) sequence.push(targetIndex + 2);*/
 
 				sequence = sequence.reverse();
-				
+
 				//console.log(sequence);
 
 				//let minSimilarity = 1000000000;
@@ -237,7 +243,10 @@ export function parseLyric(
 
 				for (let index of sequence) {
 					const v = processed[index];
-					const similarity = calcSimularity(line.originalLyric as string, v.originalLyric as string);
+					const similarity = calcSimularity(
+						line.originalLyric as string,
+						v.originalLyric as string,
+					);
 					const weight = similarity * 1000 + (v[field] ? 1 : 0);
 					//console.log("similarity", similarity, line.originalLyric, v.originalLyric);
 					//console.log("weight", index, weight, line.originalLyric, v.originalLyric);
@@ -258,7 +267,7 @@ export function parseLyric(
 				}
 				target[field] += line.lyric;
 			});
-		}
+		};
 
 		const translatedParsed = attachOriginalLyric(parsePureLyric(translated));
 		const romanParsed = attachOriginalLyric(parsePureLyric(roman));
@@ -266,10 +275,9 @@ export function parseLyric(
 
 		//console.log("translatedParsed", JSON.parse(JSON.stringify(translatedParsed)));
 
-		attachLyricToDynamic(translatedParsed, 'translatedLyric');
-		attachLyricToDynamic(romanParsed, 'romanLyric');
-		attachLyricToDynamic(rawParsed, 'rawLyric');
-
+		attachLyricToDynamic(translatedParsed, "translatedLyric");
+		attachLyricToDynamic(romanParsed, "romanLyric");
+		attachLyricToDynamic(rawParsed, "rawLyric");
 
 		//console.log("processed", JSON.parse(JSON.stringify(processed)));
 
@@ -346,10 +354,15 @@ export function parseLyric(
 		for (let i = 0; i < processed.length; i++) {
 			const thisLine = processed[i];
 			const dynamic = thisLine.dynamicLyric || [];
-			
+
 			const searchIndexes: number[] = [-1];
 			for (let j = 0; j < dynamic.length - 1; j++) {
-				if (dynamic[j]?.endsWithSpace || dynamic[j]?.word?.match(/[\,\.\，\。\!\?\？\、\；\：\…\—\~\～\·\‘\’\“\”\ﾞ]/)) {
+				if (
+					dynamic[j]?.endsWithSpace ||
+					dynamic[j]?.word?.match(
+						/[\,\.\，\。\!\?\？\、\；\：\…\—\~\～\·\‘\’\“\”\ﾞ]/,
+					)
+				) {
 					if (!dynamic[j]?.word?.match(/[a-zA-Z]+(\'\‘\’)*[a-zA-Z]*/)) {
 						searchIndexes.push(j);
 					}
@@ -390,7 +403,8 @@ const yrcLineRegexp = /^\[(?<time>[0-9]+),(?<duration>[0-9]+)\](?<line>.*)/;
 const yrcWordTimeRegexp =
 	/^\((?<time>[0-9]+),(?<duration>[0-9]+),(?<flag>[0-9]+)\)(?<word>[^\(]*)/;
 const timeRegexp = /^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([\.:]([0-9]+))?)\]/;
-const metaTimeRegexp = /^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([\.:]([0-9]+))?)\-(?<discriminator>[0-9]+)\]/; //[00:00.00-1] 作词 : xxx
+const metaTimeRegexp =
+	/^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([\.:]([0-9]+))?)\-(?<discriminator>[0-9]+)\]/; //[00:00.00-1] 作词 : xxx
 export function parsePureLyric(lyric: string): LyricPureLine[] {
 	const result: LyricPureLine[] = [];
 
@@ -424,7 +438,7 @@ export function parsePureLyric(lyric: string): LyricPureLine[] {
 		return parseUnsyncedLyrics(lyric);
 	}
 
-	return result.sort((a, b) => a.time - b.time);;
+	return result.sort((a, b) => a.time - b.time);
 }
 
 export function parseUnsyncedLyrics(lyric: string): LyricPureLine[] {
@@ -448,7 +462,7 @@ export function parseUnsyncedLyrics(lyric: string): LyricPureLine[] {
 	if (result.length) {
 		result.unshift({
 			time: 0,
-			lyric: '歌词不支持滚动',
+			lyric: "歌词不支持滚动",
 			unsynced: true,
 		});
 	}
@@ -480,7 +494,7 @@ export function parsePureDynamicLyric(lyric: string): LyricLine[] {
 						const splitedDuration = wordDuration / splitedWords.length;
 						splitedWords.forEach((subWord, i) => {
 							if (i === splitedWords.length - 1) {
-								if (/\s/.test((word ?? '')[(word ?? '').length - 1])) {
+								if (/\s/.test((word ?? "")[(word ?? "").length - 1])) {
 									words.push({
 										time: wordTime + i * splitedDuration,
 										duration: splitedDuration,
@@ -496,7 +510,7 @@ export function parsePureDynamicLyric(lyric: string): LyricLine[] {
 									});
 								}
 							} else if (i === 0) {
-								if (/\s/.test((word ?? '')[0])) {
+								if (/\s/.test((word ?? "")[0])) {
 									words.push({
 										time: wordTime + i * splitedDuration,
 										duration: splitedDuration,
@@ -586,11 +600,15 @@ export function processLyric(lyric: LyricLine[]): LyricLine[] {
 		}
 		if (thisLine?.dynamicLyric) {
 			for (let j = 0; j < thisLine.dynamicLyric.length; j++) {
-				thisLine.dynamicLyric[j].word = replaceChineseSymbolsToEnglish(thisLine.dynamicLyric[j].word);
+				thisLine.dynamicLyric[j].word = replaceChineseSymbolsToEnglish(
+					thisLine.dynamicLyric[j].word,
+				);
 			}
 		}
 		if (thisLine?.originalLyric) {
-			thisLine.originalLyric = replaceChineseSymbolsToEnglish(thisLine.originalLyric);
+			thisLine.originalLyric = replaceChineseSymbolsToEnglish(
+				thisLine.originalLyric,
+			);
 		}
 	}
 
