@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - '@importantimport/material-color-utilities'
+  - '@parcel/watcher'
+  - sharp
