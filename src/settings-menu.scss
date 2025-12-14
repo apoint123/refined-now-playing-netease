@@ -391,7 +391,8 @@ body:not(.rnp-idle) .rnp-settings {
 	opacity: .2;
 }
 
-.rnp-settings:checked {
+.rnp-settings:checked,
+.rnp-settings.open {
 	opacity: 1 !important;
 }
 

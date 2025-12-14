@@ -38,13 +38,11 @@
 		"serve": "webpack serve"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.14.0",
-		"@emotion/styled": "^11.14.1",
 		"@material/material-color-utilities": "^0.3.0",
-		"@mui/material": "^7.3.6",
 		"colorthief": "^2.6.0",
 		"compare-versions": "^6.1.1",
 		"fast-average-color": "^9.5.0",
+		"jotai": "^2.16.0",
 		"lodash": "^4.17.21",
 		"path-browserify": "^1.0.1",
 		"react": "^18.3.1",

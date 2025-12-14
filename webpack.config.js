@@ -45,6 +45,9 @@ const config = {
 	],
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"],
+		alias: {
+			"@": path.resolve(__dirname, "src"),
+		},
 		fallback: {
 			path: require.resolve("path-browserify"),
 		},
@@ -72,11 +75,6 @@ const config = {
 				test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
 				type: "asset",
 			},
-			{
-				test: /settings-menu\.html/i,
-				type: "asset/source",
-			},
-
 			// Add your rules for custom modules here
 			// Learn more about loaders from https://webpack.js.org/loaders/
 		],
