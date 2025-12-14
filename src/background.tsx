@@ -1,9 +1,7 @@
 import "./background.scss";
 import ColorThief from "colorthief";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getGradientFromPalette } from "./color-utils";
-
-const React = window.React;
-const { useState, useEffect, useRef, useCallback } = React;
 
 declare global {
 	function registerAudioLevelCallback(callback: (value: number) => void): void;

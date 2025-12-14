@@ -2,14 +2,25 @@ import "./lyric-provider";
 import { showContextMenu } from "./context-menu";
 import { copyTextToClipboard, getSetting, setSetting } from "./utils";
 import "./lyrics.scss";
+import { useAtomValue } from "jotai";
+import React, {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react";
 import type {
 	ExtendedLyricLine,
 	LyricRole,
 	ProcessedLyricsState,
 } from "./lyric-provider";
-
-const React = window.React;
-const { useState, useEffect, useRef, useCallback, useLayoutEffect } = React;
+import {
+	currentSongInfoAtom,
+	currentTimeAtom,
+	playbackStatusAtom,
+	playerService,
+} from "./services/player";
 
 const isFMSession = (): boolean => {
 	const fmPlayer = document.querySelector(".m-player-fm");
@@ -99,10 +110,9 @@ export function Lyrics(props: LyricsProps) {
 		ProcessedLyricsState["contributors"] | null
 	>(null);
 
-	const [playState, setPlayState] = useState(getPlayState());
-	const _playState = useRef(getPlayState());
+	const songInfo = useAtomValue(currentSongInfoAtom);
+	const songId = songInfo?.ncmId ?? 0;
 
-	const [songId, setSongId] = useState<string | number>("0");
 	const currentTime = useRef(0); // 当前播放时间
 	const [seekCounter, setSeekCounter] = useState(0); // 拖动进度条时修改触发重渲染
 	const [recalcCounter, setRecalcCounter] = useState(0); // 手动重计算时触发渲染
@@ -115,6 +125,17 @@ export function Lyrics(props: LyricsProps) {
 	};
 
 	const [currentLineForScrolling, setCurrentLineForScrolling] = useState(0);
+
+	const playbackStatus = useAtomValue(playbackStatusAtom);
+	const playState = playbackStatus === "Playing";
+	const _playState = useRef(playState);
+
+	useEffect(() => {
+		_playState.current = playState;
+		if (!playState) {
+			setCurrentLineForScrolling(currentLine);
+		}
+	}, [playState, currentLine]);
 
 	const [globalOffset, setGlobalOffset, _globalOffset] = useRefState<number>(
 		parseInt((getSetting("lyric-offset", 0) as string) || "0", 10),
@@ -576,18 +597,6 @@ export function Lyrics(props: LyricsProps) {
 		lyrics,
 	]);
 
-	const onPlayStateChange = (id: string | number, state: boolean) => {
-		if (!isCurrentModeSession()) return;
-		_playState.current = getPlayState();
-		setPlayState(_playState.current);
-
-		const fmPauseBtn = document.querySelector(".m-player-fm .btnp");
-		if (fmPauseBtn?.classList.contains("btnp-pause")) {
-			setCurrentLineForScrolling(currentLine);
-		}
-		setSongId(id);
-	};
-
 	const onPlayProgress = (id: string | number, progress: number) => {
 		if (!isCurrentModeSession()) return;
 
@@ -656,62 +665,24 @@ export function Lyrics(props: LyricsProps) {
 		onPlayProgress(songId, currentTime.current / 1000);
 	}, [lyrics, globalOffset]);
 
+	const currentTimeVal = useAtomValue(currentTimeAtom);
+
 	useEffect(() => {
-		legacyNativeCmder.appendRegisterCall(
-			"PlayState",
-			"audioplayer",
-			onPlayStateChange,
-		);
-		legacyNativeCmder.appendRegisterCall(
-			"PlayProgress",
-			"audioplayer",
-			onPlayProgress,
-		);
-
-		const _channalCall = channel.call;
-		channel.call = (name: string, callback: any, params: any[]) => {
-			if (name === "audioplayer.seek") {
-				if (isCurrentModeSession()) {
-					currentTime.current = parseInt((params[2] * 1000).toString(), 10);
-					setScrollingMode(false);
-					setSeekCounter(+new Date());
-				}
-			}
-			_channalCall(name, callback, params);
-		};
-
-		return () => {
-			legacyNativeCmder.removeRegisterCall(
-				"PlayState",
-				"audioplayer",
-				onPlayStateChange,
-			);
-			legacyNativeCmder.removeRegisterCall(
-				"PlayProgress",
-				"audioplayer",
-				onPlayProgress,
-			);
-			channel.call = _channalCall;
-		};
-	}, []);
+		onPlayProgress(songId, currentTimeVal / 1000);
+	}, [currentTimeVal, songId]);
 
 	const jumpToTime = useCallback(
 		(time: number) => {
 			time -= _globalOffset.current;
 			shouldTransit.current = true;
 			setScrollingMode(false);
-			channel.call("audioplayer.seek", () => {}, [
-				songId,
-				`${songId}|seek|${Math.random().toString(36).substring(6)}`,
-				time / 1000,
-			]);
 
-			setSeekCounter(+new Date());
+			playerService.seek(time);
+
+			setSeekCounter(Date.now());
+
 			if (!playState) {
-				const btn = !isFM
-					? document.querySelector("#main-player .btnp")
-					: document.querySelector(".m-player-fm .btnp");
-				(btn as HTMLElement)?.click();
+				playerService.togglePlay();
 			}
 		},
 		[songId, playState, globalOffset],

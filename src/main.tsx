@@ -5,6 +5,7 @@ import {
 	waitForElementAsync,
 } from "./utils";
 import "./refined-control-bar";
+import { createRoot } from "react-dom/client";
 import { Background } from "./background";
 import { compatibilityWizard } from "./compatibility-check";
 import { showContextMenu } from "./context-menu";
@@ -13,6 +14,8 @@ import { Lyrics } from "./lyrics";
 import { MiniSongInfo } from "./mini-song-info";
 import { SettingsPatcher } from "./patchers/settings";
 import { ProgressbarPreview } from "./progressbar-preview";
+import { imageInterceptor } from "./services/image-interceptor.ts";
+import { playerService } from "./services/player";
 import { themeService } from "./services/theme";
 import { whatsNew } from "./whats-new";
 
@@ -22,9 +25,6 @@ import "./FM.scss";
 import "./experimental.scss";
 import "./material-you-compatibility.scss";
 import "./settings-menu.scss";
-import { imageInterceptor } from "./services/image-interceptor.ts";
-
-const ReactDOM = window.ReactDOM;
 
 var lastCDImage = "";
 const updateCDImage = () => {
@@ -259,6 +259,7 @@ new MutationObserver(() => {
 
 plugin.onLoad(async () => {
 	imageInterceptor.enable();
+	await playerService.init();
 	compatibilityWizard();
 
 	document.body.classList.add("refined-now-playing");
@@ -376,21 +377,19 @@ plugin.onLoad(async () => {
 			const background = document.createElement("div");
 			background.classList.add("rnp-bg");
 			const bgImg = await waitForElementAsync(".n-single .cdimg img");
-			ReactDOM.render(
+			createRoot(background).render(
 				<Background
 					type={String(getSetting("background-type", "fluid"))}
 					image={bgImg as HTMLImageElement}
 				/>,
-				background,
 			);
 			document.querySelector(".g-single")?.appendChild(background);
 
 			const coverShadowController = document.createElement("div");
 			coverShadowController.classList.add("rnp-cover-shadow-controller");
 			const shadowImg = await waitForElementAsync(".n-single .cdimg img");
-			ReactDOM.render(
+			createRoot(coverShadowController).render(
 				<CoverShadow image={shadowImg as HTMLImageElement} />,
-				coverShadowController,
 			);
 			document.body.appendChild(coverShadowController);
 
@@ -402,7 +401,7 @@ plugin.onLoad(async () => {
 			);
 			const lyrics = document.createElement("div");
 			lyrics.classList.add("lyric");
-			ReactDOM.render(<Lyrics />, lyrics);
+			createRoot(lyrics).render(<Lyrics />);
 			waitForElement(".g-single-track .g-singlec-ct .n-single .wrap", (dom) => {
 				dom.appendChild(lyrics);
 			});
@@ -415,12 +414,11 @@ plugin.onLoad(async () => {
 					".g-single .g-singlec-ct .n-single .mn .head .inf",
 				);
 
-				ReactDOM.render(
+				createRoot(miniSongInfo).render(
 					<MiniSongInfo
 						image={miniInfoImg as HTMLImageElement}
 						infContainer={miniInfoContainer as HTMLElement}
 					/>,
-					miniSongInfo,
 				);
 				document.querySelector(".g-single")?.appendChild(miniSongInfo);
 			}, 0);
@@ -451,9 +449,8 @@ plugin.onLoad(async () => {
 	waitForElement("#main-player .prg", (dom) => {
 		const progressbarPreview = document.createElement("div");
 		progressbarPreview.classList.add("rnp-progressbar-preview");
-		ReactDOM.render(
+		createRoot(progressbarPreview).render(
 			<ProgressbarPreview dom={dom as HTMLElement} />,
-			progressbarPreview,
 		);
 		document.body.appendChild(progressbarPreview);
 	});
@@ -461,9 +458,8 @@ plugin.onLoad(async () => {
 		const progressbarPreview = document.createElement("div");
 		progressbarPreview.classList.add("rnp-progressbar-preview");
 		progressbarPreview.classList.add("rnp-progressbar-preview-fm");
-		ReactDOM.render(
-			<ProgressbarPreview dom={dom as HTMLElement} isFM />,
-			progressbarPreview,
+		createRoot(progressbarPreview).render(
+			<ProgressbarPreview dom={dom as HTMLElement} />,
 		);
 		document.body.appendChild(progressbarPreview);
 	});
@@ -516,7 +512,7 @@ plugin.onLoad(async () => {
 			const lyrics = document.createElement("div");
 			lyrics.classList.add("lyric");
 			document.querySelector("#page_pc_userfm_songplay")?.appendChild(lyrics);
-			ReactDOM.render(<Lyrics isFM={true} />, lyrics);
+			createRoot(lyrics).render(<Lyrics isFM={true} />);
 			for (let i = 0; i < 15; i++) {
 				setTimeout(() => {
 					window.dispatchEvent(new Event("resize"));
@@ -529,7 +525,7 @@ plugin.onLoad(async () => {
 			const fmCover = await waitForElementAsync(
 				"#page_pc_userfm_songplay .fmplay .covers",
 			);
-			ReactDOM.render(
+			createRoot(background).render(
 				<Background
 					type={String(getSetting("background-type", "fluid"))}
 					image={fmCover as HTMLImageElement}
@@ -539,7 +535,6 @@ plugin.onLoad(async () => {
 						themeService.calcAccentColor(dom, true);
 					}}
 				/>,
-				background,
 			);
 			document
 				.querySelector("#page_pc_userfm_songplay")

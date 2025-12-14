@@ -1,7 +1,5 @@
+import { useEffect, useState } from "react";
 import { getSetting } from "./utils";
-
-const React = window.React;
-const { useState, useEffect } = React;
 
 interface CoverShadowProps {
 	image: HTMLImageElement;

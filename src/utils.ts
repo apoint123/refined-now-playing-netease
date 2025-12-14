@@ -119,3 +119,34 @@ export const cyrb53 = (str: string, seed = 0): number => {
 
 	return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
+
+/**
+ * @description 等待全局变量出现
+ * @param key 全局变量名
+ * @param timeout 超时时间 (ms)，默认 10秒
+ */
+export const waitForGlobal = <T>(
+	key: keyof Window,
+	timeout = 10000,
+): Promise<T | null> => {
+	return new Promise((resolve) => {
+		if (window[key]) {
+			resolve(window[key]);
+			return;
+		}
+
+		const startTime = Date.now();
+		const interval = setInterval(() => {
+			if (window[key]) {
+				clearInterval(interval);
+				resolve(window[key]);
+			} else if (Date.now() - startTime > timeout) {
+				clearInterval(interval);
+				console.warn(
+					`[RefinedNowPlaying] Wait for global '${String(key)}' timed out.`,
+				);
+				resolve(null);
+			}
+		}, 100);
+	});
+};

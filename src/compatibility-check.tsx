@@ -1,9 +1,7 @@
+import { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import "./compatibility-check.scss";
 import { compareVersions } from "compare-versions";
-
-const React = window.React;
-const ReactDOM = window.ReactDOM;
-const { useState, useEffect } = React;
 
 interface ButtonProps {
 	text: string;

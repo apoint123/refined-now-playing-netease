@@ -1,8 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import "./progressbar-preview.scss";
 import { getSetting } from "./utils";
-
-const React = window.React;
-const { useState, useEffect, useRef } = React;
 
 interface Word {
 	word: string;

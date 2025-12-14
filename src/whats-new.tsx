@@ -1,5 +1,7 @@
 import "./whats-new.scss";
 import { compareVersions } from "compare-versions";
+import { useRef } from "react";
+import ReactDOM from "react-dom";
 import changeLogRaw from "./whats-new.json";
 
 type ChangeType = "add" | "optimize" | "fix" | "remove" | "revert";
@@ -11,10 +13,6 @@ interface ChangeLogVersion {
 }
 
 const changeLog = changeLogRaw as ChangeLogVersion[];
-
-const React = window.React;
-const ReactDOM = window.ReactDOM;
-const useRef = React.useRef;
 
 interface WhatsNewProps {
 	lastVersion: string;

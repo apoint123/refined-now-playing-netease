@@ -1,7 +1,5 @@
+import { useEffect, useState } from "react";
 import "./mini-song-info.scss";
-
-const React = window.React;
-const { useState, useEffect } = React;
 
 interface MiniSongInfoProps {
 	image: HTMLImageElement;

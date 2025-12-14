@@ -1,8 +1,12 @@
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react";
+import ReactDOM from "react-dom";
 import "./context-menu.scss";
-
-const React = window.React;
-const ReactDOM = window.ReactDOM;
-const { useEffect, useLayoutEffect, useCallback, useState, useRef } = React;
 
 export interface ContextMenuItem {
 	label?: string;
