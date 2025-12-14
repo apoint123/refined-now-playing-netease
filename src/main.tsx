@@ -5,7 +5,7 @@ import "./experimental.scss";
 // @ts-expect-error: HTML import handled by global.d.ts
 import settingsMenuHTML from "./settings-menu.html";
 import "./settings-menu.scss";
-import { argb2Rgb, rgb2Argb } from "./color-utils.js";
+import { argb2Rgb, rgb2Argb } from "./color-utils";
 import {
 	chunk,
 	copyTextToClipboard,
@@ -30,7 +30,7 @@ import { showContextMenu } from "./context-menu.js";
 import { CoverShadow } from "./cover-shadow";
 import { FontSettings } from "./font-settings.js";
 import { Lyrics } from "./lyrics.js";
-import { MiniSongInfo } from "./mini-song-info.js";
+import { MiniSongInfo } from "./mini-song-info";
 import { ProgressbarPreview } from "./progressbar-preview.js";
 import { whatsNew } from "./whats-new.js";
 import "./material-you-compatibility.scss";
