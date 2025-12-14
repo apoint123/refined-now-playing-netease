@@ -28,7 +28,7 @@ import {
 } from "./compatibility-check";
 import { showContextMenu } from "./context-menu";
 import { CoverShadow } from "./cover-shadow";
-import { FontSettings } from "./font-settings.js";
+import { FontSettings } from "./font-settings";
 import { Lyrics } from "./lyrics.js";
 import { MiniSongInfo } from "./mini-song-info";
 import { ProgressbarPreview } from "./progressbar-preview";

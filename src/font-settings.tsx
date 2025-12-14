@@ -1,8 +1,10 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import type * as React from "react";
 import { getSetting, setSetting } from "./utils";
+import "./font-settings.scss";
+import { useEffect, useState } from "react";
 
 const darkTheme = createTheme({
 	palette: {
@@ -10,22 +12,29 @@ const darkTheme = createTheme({
 	},
 });
 
-import "./font-settings.scss";
+interface FontPresetProps {
+	fonts: string[];
+	name: string;
+	url: string;
+	setFontFamily: React.Dispatch<React.SetStateAction<string[]>>;
+	fontList: string[];
+}
 
-const useEffect = React.useEffect;
-const useState = React.useState;
-
-export function FontSettings(props) {
-	const [fontList, setFontList] = useState([]);
-	const [fontFamily, setFontFamily] = useState(
-		JSON.parse(getSetting("font-family", "[]")),
+export function FontSettings(_props: any) {
+	const [fontList, setFontList] = useState<string[]>([]);
+	const [fontFamily, setFontFamily] = useState<string[]>(
+		JSON.parse(getSetting("font-family", "[]") as any),
 	);
 
 	useEffect(() => {
 		async function getFontList() {
-			setFontList(
-				(await legacyNativeCmder.call("os.querySystemFonts"))[1] ?? [],
-			);
+			try {
+				const result = await legacyNativeCmder.call("os.querySystemFonts");
+				setFontList(result?.[1] ?? []);
+			} catch (e) {
+				console.error("Failed to load fonts", e);
+				setFontList([]);
+			}
 		}
 		getFontList();
 	}, []);
@@ -37,6 +46,7 @@ export function FontSettings(props) {
 			style.id = "rnp-font-family-controller";
 			document.head.appendChild(style);
 		}
+
 		style.innerHTML = `
 			body.rnp-custom-font .g-single-track .lyric *,
 			body.rnp-custom-font .n-single .head *,
@@ -53,7 +63,7 @@ export function FontSettings(props) {
 				<Autocomplete
 					multiple
 					value={fontFamily}
-					onChange={(event, newValue) => {
+					onChange={(_, newValue) => {
 						setFontFamily(newValue);
 					}}
 					options={fontList}
@@ -138,7 +148,8 @@ export function FontSettings(props) {
 		</>
 	);
 }
-function FontPreset(props) {
+
+function FontPreset(props: FontPresetProps) {
 	const hasFont = props.fonts.some((font) => props.fontList.includes(font));
 
 	return (
@@ -156,7 +167,9 @@ function FontPreset(props) {
 				<button
 					className="rnp-download-font-button"
 					onClick={async () => {
-						await betterncm.app.exec(props.url);
+						if (props.url) {
+							await betterncm.app.exec(props.url);
+						}
 					}}
 				>
 					<svg
