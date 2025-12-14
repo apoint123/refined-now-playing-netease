@@ -171,6 +171,7 @@ export function parseLyric(
 				let target: LyricPureLine | null = null;
 				if (attachMatchingMode === "equal") {
 					//target = findLast(lyric, (v) => v.time === line.time);
+					// @ts-expect-error
 					target = findLast(lyric, (v) => Math.abs(v.time - line.time) < 20);
 				} else {
 					lyric.forEach((v) => {
@@ -241,7 +242,7 @@ export function parseLyric(
 				//let minSimilarity = 1000000000;
 				let minWeight = 1000000000;
 
-				for (let index of sequence) {
+				for (const index of sequence) {
 					const v = processed[index];
 					const similarity = calcSimularity(
 						line.originalLyric as string,
@@ -359,11 +360,9 @@ export function parseLyric(
 			for (let j = 0; j < dynamic.length - 1; j++) {
 				if (
 					dynamic[j]?.endsWithSpace ||
-					dynamic[j]?.word?.match(
-						/[\,\.\，\。\!\?\？\、\；\：\…\—\~\～\·\‘\’\“\”\ﾞ]/,
-					)
+					dynamic[j]?.word?.match(/[,.，。!?？、；：…—~～·‘’“”ﾞ]/)
 				) {
-					if (!dynamic[j]?.word?.match(/[a-zA-Z]+(\'\‘\’)*[a-zA-Z]*/)) {
+					if (!dynamic[j]?.word?.match(/[a-zA-Z]+('‘’)*[a-zA-Z]*/)) {
 						searchIndexes.push(j);
 					}
 				}
@@ -401,10 +400,10 @@ export function parseLyric(
 
 const yrcLineRegexp = /^\[(?<time>[0-9]+),(?<duration>[0-9]+)\](?<line>.*)/;
 const yrcWordTimeRegexp =
-	/^\((?<time>[0-9]+),(?<duration>[0-9]+),(?<flag>[0-9]+)\)(?<word>[^\(]*)/;
-const timeRegexp = /^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([\.:]([0-9]+))?)\]/;
+	/^\((?<time>[0-9]+),(?<duration>[0-9]+),(?<flag>[0-9]+)\)(?<word>[^(]*)/;
+const timeRegexp = /^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([.:]([0-9]+))?)\]/;
 const metaTimeRegexp =
-	/^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([\.:]([0-9]+))?)\-(?<discriminator>[0-9]+)\]/; //[00:00.00-1] 作词 : xxx
+	/^\[((?<min>[0-9]+):)?(?<sec>[0-9]+([.:]([0-9]+))?)-(?<discriminator>[0-9]+)\]/; //[00:00.00-1] 作词 : xxx
 export function parsePureLyric(lyric: string): LyricPureLine[] {
 	const result: LyricPureLine[] = [];
 
@@ -444,7 +443,7 @@ export function parsePureLyric(lyric: string): LyricPureLine[] {
 export function parseUnsyncedLyrics(lyric: string): LyricPureLine[] {
 	const result: LyricPureLine[] = [];
 	for (const line of lyric.split("\n")) {
-		let lyric = line.trim();
+		const lyric = line.trim();
 		if (!lyric.length) {
 			continue;
 		}

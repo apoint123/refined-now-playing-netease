@@ -1,7 +1,7 @@
 // code from material you theme
 
 import "./refined-control-bar.scss";
-import { waitForElement, getSetting, setSetting } from "./utils.js";
+import { getSetting, setSetting, waitForElement } from "./utils";
 
 const injectHTML = (type, html, parent, fun = (dom) => {}) => {
 	const dom = document.createElement(type);
@@ -22,7 +22,7 @@ const timeToSeconds = (time) => {
 	let seconds = 0;
 	const parts = time.split(":");
 	for (let i = 0; i < parts.length; i++) {
-		seconds += parseInt(parts[i]) * Math.pow(60, parts.length - i - 1);
+		seconds += parseInt(parts[i]) * 60 ** (parts.length - i - 1);
 	}
 	return seconds;
 };

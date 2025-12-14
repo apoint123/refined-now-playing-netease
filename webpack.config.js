@@ -1,6 +1,6 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-const path = require("path");
+const path = require("node:path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const copyWebpackPlugin = require("copy-webpack-plugin");
@@ -8,7 +8,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin =
 	require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-const isProduction = process.env.NODE_ENV == "production";
+const isProduction = process.env.NODE_ENV === "production";
 
 /*const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
@@ -17,7 +17,7 @@ const isProduction = process.env.NODE_ENV == "production";
 const stylesHandler = "style-loader";
 
 const config = {
-	entry: "./src/main.js",
+	entry: "./src/main.tsx",
 	output: {
 		path: path.resolve(__dirname, "dist"),
 	},

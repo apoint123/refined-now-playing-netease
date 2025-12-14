@@ -1,6 +1,6 @@
 import "./lyric-provider.js";
-import { getSetting, setSetting, copyTextToClipboard } from "./utils.js";
 import { showContextMenu } from "./context-menu";
+import { copyTextToClipboard, getSetting, setSetting } from "./utils";
 import "./lyrics.scss";
 
 import _isEqual from "lodash/isEqual";
@@ -308,7 +308,7 @@ export function Lyrics(props) {
 			if (!lyricStagger) {
 				return 0;
 			}
-			let sign =
+			const sign =
 				currentLineForScrolling - previousFocusedLineRef.current > 0 ? 1 : -1;
 			offset = Math.max(-4, Math.min(4, offset)) * sign + 4;
 			return offset * 50;
@@ -411,7 +411,7 @@ export function Lyrics(props) {
 			transforms[i].scale = scaleByOffset(current - i);
 			transforms[i].blur = blurByOffset(i - current);
 			transforms[i].opacity = opacityByOffset(i - current);
-			let scaledHeight = heightOfItems.current[i] * transforms[i].scale;
+			const scaledHeight = heightOfItems.current[i] * transforms[i].scale;
 			transforms[i].top = transforms[i + 1].top - scaledHeight - space;
 			transforms[i].delay = delayByOffset(i - current);
 			setRotateTransform(
@@ -1261,7 +1261,7 @@ function Line(props) {
 
 	// update glow animation
 	useEffect(() => {
-		for (let glowAnimation of glowAnimationsRef.current) {
+		for (const glowAnimation of glowAnimationsRef.current) {
 			//console.log(glowAnimation, glowAnimationsRef.current);
 			const animation = glowAnimation.animation;
 			const timing = glowAnimation.timing;

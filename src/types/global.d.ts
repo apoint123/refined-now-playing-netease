@@ -105,6 +105,15 @@ declare global {
 		 * 可以给其它插件用的接口
 		 */
 		InfLinkApi?: IInfLinkApi;
+
+		/** CD 图片大小 (用于高清封面替换) */
+		albumSize?: number;
+
+		/** 当前主题色变体 (primary, secondary 等) */
+		accentColorVariant?: string;
+
+		/** 当前主题模式 (dark/light) */
+		mdThemeType?: "dark" | "light";
 	}
 
 	const BETTERNCM_API_KEY: Window["BETTERNCM_API_KEY"];
