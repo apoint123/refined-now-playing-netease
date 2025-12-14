@@ -31,7 +31,7 @@ import { CoverShadow } from "./cover-shadow";
 import { FontSettings } from "./font-settings.js";
 import { Lyrics } from "./lyrics.js";
 import { MiniSongInfo } from "./mini-song-info";
-import { ProgressbarPreview } from "./progressbar-preview.js";
+import { ProgressbarPreview } from "./progressbar-preview";
 import { whatsNew } from "./whats-new.js";
 import "./material-you-compatibility.scss";
 import { createRoot } from "react-dom/client";
