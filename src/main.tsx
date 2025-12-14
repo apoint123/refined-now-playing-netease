@@ -20,7 +20,7 @@ import {
 	QuantizerCelebi,
 	Score,
 	themeFromSourceColor,
-} from "@importantimport/material-color-utilities";
+} from "@material/material-color-utilities";
 import { Background } from "./background";
 import {
 	compatibilityWizard,
