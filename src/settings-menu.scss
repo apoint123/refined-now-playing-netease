@@ -1,4 +1,3 @@
-
 .rnp-checkbox-wrapper {
 	display: flex;
 	flex-direction: row;
@@ -6,9 +5,11 @@
 	margin-bottom: 20px;
 	transition: all .3s ease;
 	height: var(--estimated-height, unset);
+
 	input[type=checkbox] {
 		cursor: pointer;
 	}
+
 	.rnp-checkbox {
 		appearance: none;
 		background-color: #dfe1e433;
@@ -20,6 +21,7 @@
 		position: relative;
 		width: 30px;
 		transition: all 100ms ease-out;
+
 		&::before {
 			bottom: -6px;
 			content: "";
@@ -28,6 +30,7 @@
 			right: -6px;
 			top: -6px;
 		}
+
 		&::after {
 			background-color: #fff;
 			border-radius: 50%;
@@ -39,36 +42,45 @@
 			width: 14px;
 			transition: all 100ms ease-out;
 		}
+
 		&:hover {
 			background-color: #c9cbcd33;
 			transition-duration: 0s;
 		}
+
 		&:checked {
 			background-color: var(--rnp-accent-color);
+
 			&::after {
 				background-color: #fff;
 				left: 13px;
 			}
+
 			&:hover {
 				background-color: var(--rnp-accent-color);
 			}
 		}
 	}
+
 	.rnp-checkbox-label {
 		padding-left: 10px;
 		cursor: pointer;
 		margin-right: 2px;
 	}
-	&:last-of-type + .rnp-checkbox-note {
+
+	&:last-of-type+.rnp-checkbox-note {
 		margin-bottom: 0;
 	}
+
 	&:last-child {
 		margin-bottom: 0;
 	}
+
 	&.with-note {
 		margin-bottom: 15px;
 	}
 }
+
 .rnp-checkbox-note {
 	opacity: .5;
 	font-size: 14px;
@@ -89,9 +101,11 @@
 	overflow: hidden;
 	transition: all .3s ease;
 }
+
 .rnp-slider-label {
 	margin-bottom: 12px;
 }
+
 .rnp-slider {
 	-webkit-appearance: none;
 	background-color: #dfe1e422;
@@ -99,9 +113,11 @@
 	width: 100%;
 	height: 8px;
 }
+
 .rnp-slider:first-child {
 	margin-top: 5px;
 }
+
 .rnp-slider::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	width: 10px;
@@ -111,12 +127,14 @@
 	border-radius: 10px;
 	transition: all .2s ease;
 }
+
 .rnp-slider::-webkit-slider-thumb:hover {
 	-webkit-appearance: none;
 	width: 8px;
 	height: 16px;
 	cursor: pointer;
 }
+
 .rnp-slider-reset {
 	width: 8px;
 	height: 8px;
@@ -128,17 +146,21 @@
 	background-color: #fff;
 	transition: background-color .2s ease, opacity .2s ease;
 }
+
 .rnp-slider-reset:hover {
 	opacity: 1;
 	background-color: var(--rnp-accent-color);
 }
+
 .rnp-slider-wrapper:not(.changed) .rnp-slider-reset {
 	opacity: 0;
 	pointer-events: none;
 }
+
 .rnp-slider-wrapper.with-ticks {
 	height: unset;
 }
+
 .rnp-slider-ticks {
 	display: flex;
 	width: 100%;
@@ -147,11 +169,13 @@
 	justify-content: space-between;
 	margin-top: 5px;
 }
+
 .rnp-slider-tick {
 	font-size: 14px;
 	transition: all .3s ease;
 	opacity: 0.5;
 }
+
 .rnp-slider-note {
 	opacity: .5;
 	font-size: 14px;
@@ -159,7 +183,8 @@
 	margin-top: -10px;
 	margin-bottom: 20px;
 }
-.rnp-checkbox-wrapper:last-of-type + .rnp-slider-note {
+
+.rnp-checkbox-wrapper:last-of-type+.rnp-slider-note {
 	margin-bottom: 0;
 }
 
@@ -170,10 +195,12 @@
 	flex-direction: column;
 	margin-bottom: 20px;
 }
+
 .rnp-select-group-label {
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
+
 .rnp-select-group {
 	display: flex;
 	flex-direction: row;
@@ -182,6 +209,7 @@
 	flex: 1;
 	gap: 1px;
 }
+
 .rnp-select-group-btn {
 	flex: 1;
 	background-color: #dfe1e433;
@@ -191,15 +219,18 @@
 	padding-bottom: 4px;
 	transition: background-color .3s ease;
 	white-space: nowrap;
-    min-width: 40px;
+	min-width: 40px;
 	font-size: 16px;
 }
+
 .rnp-select-group-btn:first-child {
 	border-radius: 6px 0 0 6px;
 }
+
 .rnp-select-group-btn:last-child {
 	border-radius: 0 6px 6px 0;
 }
+
 .rnp-select-group-btn.selected {
 	background-color: var(--rnp-accent-color);
 	font-weight: bold;
@@ -208,21 +239,25 @@
 
 .rnp-lyric-offset {
 	margin-bottom: 25px;
-	> div:first-child {
+
+	>div:first-child {
 		display: flex;
 		align-items: center;
 	}
+
 	.rnp-slider-wrapper {
 		margin-top: 6px;
 		margin-bottom: 0;
-    	height: 14px;
+		height: 14px;
 	}
-	> div:last-child {
+
+	>div:last-child {
 		display: flex;
 		margin-top: 6px;
 		justify-content: space-between;
 		font-size: 13px;
 		align-items: center;
+
 		button:not(.rnp-slider-reset) {
 			opacity: 0.8;
 			background: #dfe1e422;
@@ -232,18 +267,22 @@
 			font-size: 16px;
 			border-radius: 6px;
 			transition: background-color .25s ease;
+
 			&.active {
 				background: var(--rnp-accent-color);
 			}
 		}
+
 		label {
 			font-size: 16px;
 			opacity: 0.5;
 		}
 	}
+
 	.rnp-slider-reset {
 		transform: translateY(1px);
 	}
+
 	.rnp-slider-reset:not(.active) {
 		opacity: 0;
 		pointer-events: none;
@@ -251,9 +290,10 @@
 }
 
 .rnp-about-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15px;
+
 	.rnp-about-item-content {
 		opacity: .6;
 	}
@@ -279,18 +319,22 @@
 	color: #fff;
 	height: min(500px, 60vh);
 	overflow: hidden;
+
 	button {
 		color: #fff;
 	}
+
 	.rnp-settings-menu-tabs {
 		width: max-content;
 		padding-top: 16px;
 		padding-left: 20px;
+
 		.rnp-settings-menu-tab {
 			padding: 10px 10px;
 			font-size: 18px;
 			transition: transform .2s ease, color .2s ease;
 			cursor: pointer;
+
 			&.active {
 				font-weight: bold;
 				transform: scale(1.1);
@@ -298,13 +342,16 @@
 			}
 		}
 	}
+
 	.rnp-settings-menu-inner {
 		width: 250px;
 		overflow-y: auto;
 		padding: 0px 20px 20px 10px;
+
 		.rnp-group {
 			padding-top: 30px;
 			padding-bottom: 5px;
+
 			.rnp-group-title {
 				margin-bottom: 20px;
 				font-size: 25px;
@@ -312,6 +359,7 @@
 				font-weight: bold;
 			}
 		}
+
 		&::-webkit-scrollbar-track {
 			background: transparent !important;
 		}
@@ -321,7 +369,7 @@
 .rnp-settings {
 	appearance: none;
 	position: fixed;
-	
+
 	right: 20px;
 	top: 65px;
 	background-color: var(--rnp-accent-color-contrast);
@@ -342,13 +390,16 @@
 body:not(.rnp-idle) .rnp-settings {
 	opacity: .2;
 }
+
 .rnp-settings:checked {
 	opacity: 1 !important;
 }
+
 .rnp-settings:hover {
 	opacity: .7;
 }
-.rnp-settings:checked + .rnp-settings-menu {
+
+.rnp-settings:checked+.rnp-settings-menu {
 	pointer-events: all;
 	opacity: 1;
 	transform: none;
@@ -359,12 +410,12 @@ body:not(.partial-bg) .bg-opacity,
 body:not(.rnp-bg-blur) .bg-blur,
 body:not(.rnp-bg-gradient) .gradient-bg-dynamic,
 body:not(.rnp-bg-gradient) .bg-dim-for-gradient-bg,
-body:not(.rnp-bg-blur) .bg-dim, 
+body:not(.rnp-bg-blur) .bg-dim,
 body:not(.rnp-bg-fluid) .bg-dim-for-fluid-bg,
 body:not(.rnp-bg-none) .bg-blur-for-none-bg-mask,
 body:not(.rnp-bg-none) .bg-dim-for-none-bg-mask,
 body:not(.rnp-bg-fluid) .static-fluid,
-body:not(.rnp-bg-fluid) .static-fluid + .rnp-checkbox-note,
+body:not(.rnp-bg-fluid) .static-fluid+.rnp-checkbox-note,
 body.rnp-bg-none .partial-bg,
 body:not(.lyric-only) .center-lyric-control,
 body:not(.lyric-only) .auto-hide-mini-song-info-control,
@@ -372,7 +423,7 @@ body.material-you-theme .refined-control-bar-switch,
 body:not(.refined-control-bar):not(.material-you-theme) .bottom-progressbar-switch,
 body:not(.rnp-custom-font) .rnp-custom-font-section,
 .m-fm .presentation-mode-switch,
-.m-fm .presentation-mode-switch + .rnp-checkbox-note,
+.m-fm .presentation-mode-switch+.rnp-checkbox-note,
 body.lyric-rotate .lyric-fade,
 body:not(.lyric-rotate) .rotate-curvature {
 	opacity: 0;

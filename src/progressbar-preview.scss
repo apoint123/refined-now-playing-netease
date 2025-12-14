@@ -9,13 +9,15 @@
 	padding: 10px 15px;
 	border-radius: 8px;
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	gap: 8px;
-	&.invisible, &:empty {
+
+	&.invisible,
+	&:empty {
 		opacity: 0;
 	}
 
-	> * {
+	>* {
 		white-space: nowrap;
 	}
 
@@ -30,21 +32,23 @@
 				$fade-width: 20;
 				-webkit-mask-image: linear-gradient(to right,
 					rgba(0, 0, 0, 1) #{100 / (200 + $fade-width) * 100%},
-					rgba(0, 0, 0, 0.4) #{(100 + $fade-width) / (200 + $fade-width) * 100%}
-				);
+					rgba(0, 0, 0, 0.4) #{(100 + $fade-width) / (200 + $fade-width) * 100%});
 				-webkit-mask-size: #{(200 + $fade-width) * 1%} 100%;
 				-webkit-mask-repeat: no-repeat;
 				will-change: -webkit-mask-position-x, transform;
 			}
+
 			&.upcoming {
 				opacity: 0.4;
 			}
 		}
 	}
+
 	.progressbar-preview-line-original {
 		//font-weight: bold;
 		opacity: .9;
 	}
+
 	.progressbar-preview-line-translated {
 		opacity: .7;
 		font-size: 90%;
@@ -58,12 +62,14 @@
 		overflow: hidden;
 		opacity: .6;
 		margin-top: 2px;
+
 		.progressbar-preview-subprogressbar-inner {
 			height: 100%;
 			background: #fff;
 			border-radius: 100px;
 		}
 	}
+
 	.progressbar-preview-line-time {
 		font-size: 70%;
 		opacity: .4;
@@ -73,6 +79,7 @@
 		gap: 16px;
 	}
 }
+
 body:not(.enable-progressbar-preview) {
 	.progressbar-preview {
 		display: none;
