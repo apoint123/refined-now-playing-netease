@@ -1,24 +1,34 @@
 import "./context-menu.scss";
 
-const useEffect = React.useEffect;
-const useLayoutEffect = React.useLayoutEffect;
-const useCallback = React.useCallback;
-const useState = React.useState;
-const useRef = React.useRef;
+const React = window.React;
+const ReactDOM = window.ReactDOM;
+const { useEffect, useLayoutEffect, useCallback, useState, useRef } = React;
 
-function ContextMenu(props) {
-	// props:
-	// items: [{html: '', label: '', callback: () => {}}, ...] // label or html is required, if both are provided, html will be used
-	// x: number
-	// y: number
-	const menuRef = useRef(null);
-	const [position, setPosition] = useState({
+export interface ContextMenuItem {
+	label?: string;
+	html?: string;
+	divider?: boolean;
+	callback?: () => void;
+}
+
+interface ContextMenuProps {
+	items: ContextMenuItem[];
+	x: number;
+	y: number;
+	parent: HTMLElement;
+}
+
+function ContextMenu(props: ContextMenuProps) {
+	const menuRef = useRef<HTMLDivElement>(null);
+	const [position, _setPosition] = useState({
 		x: props.x ?? 0,
 		y: props.y ?? 0,
 	});
 
 	useLayoutEffect(() => {
 		const menu = menuRef.current;
+		if (!menu) return;
+
 		const { x, y } = position;
 		const { width, height } = menu.getBoundingClientRect();
 		const { innerWidth, innerHeight } = window;
@@ -45,7 +55,9 @@ function ContextMenu(props) {
 			menu.style.top = `${y}px`;
 			anchor += "top";
 		}
+
 		menu.style.transformOrigin = anchor;
+
 		menu.animate(
 			[
 				{ width: "0px", height: "0px", opacity: 0.3 },
@@ -60,24 +72,33 @@ function ContextMenu(props) {
 	}, [position]);
 
 	const closeMenu = useCallback(() => {
-		menuRef.current.animate([{ opacity: 1 }, { opacity: 0 }], {
+		const menu = menuRef.current;
+		if (!menu) return;
+
+		const animation = menu.animate([{ opacity: 1 }, { opacity: 0 }], {
 			duration: 150,
 			easing: "ease-out",
 			fill: "forwards",
-		}).onfinish = () => {
-			ReactDOM.unmountComponentAtNode(menuRef.current);
-			menuRef.current.remove();
+		});
+
+		animation.onfinish = () => {
+			ReactDOM.unmountComponentAtNode(props.parent);
+			menu.remove();
 			props.parent.remove();
 		};
-	}, []);
+	}, [props.parent]);
 
 	useEffect(() => {
-		menuRef.current.focus();
-		menuRef.current.addEventListener("blur", closeMenu);
+		if (menuRef.current) {
+			menuRef.current.focus();
+			menuRef.current.addEventListener("blur", closeMenu);
+		}
 		return () => {
-			menuRef.current.removeEventListener("blur", closeMenu);
+			if (menuRef.current) {
+				menuRef.current.removeEventListener("blur", closeMenu);
+			}
 		};
-	}, []);
+	}, [closeMenu]);
 
 	return (
 		<div className="rnp-context-menu" tabIndex={0} ref={menuRef}>
@@ -107,7 +128,11 @@ function ContextMenu(props) {
 	);
 }
 
-export function showContextMenu(x, y, items) {
+export function showContextMenu(
+	x: number,
+	y: number,
+	items: ContextMenuItem[],
+) {
 	const div = document.createElement("div");
 	document.body.appendChild(div);
 	ReactDOM.render(<ContextMenu items={items} x={x} y={y} parent={div} />, div);
