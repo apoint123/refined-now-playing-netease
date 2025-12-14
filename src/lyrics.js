@@ -1,4 +1,4 @@
-import "./lyric-provider.js";
+import "./lyric-provider";
 import { showContextMenu } from "./context-menu";
 import { copyTextToClipboard, getSetting, setSetting } from "./utils";
 import "./lyrics.scss";

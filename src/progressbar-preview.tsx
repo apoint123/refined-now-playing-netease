@@ -24,14 +24,6 @@ interface ProgressbarPreviewProps {
 	isFM?: boolean;
 }
 
-declare global {
-	interface Window {
-		currentLyrics?: {
-			lyrics: LyricLine[];
-		};
-	}
-}
-
 const isFMSession = () => {
 	const fmNode = document.querySelector(".m-player-fm");
 	return fmNode && !fmNode.classList.contains("f-dn");
