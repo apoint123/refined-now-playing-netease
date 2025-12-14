@@ -32,7 +32,7 @@ import { FontSettings } from "./font-settings.js";
 import { Lyrics } from "./lyrics.js";
 import { MiniSongInfo } from "./mini-song-info";
 import { ProgressbarPreview } from "./progressbar-preview";
-import { whatsNew } from "./whats-new.js";
+import { whatsNew } from "./whats-new";
 import "./material-you-compatibility.scss";
 import { createRoot } from "react-dom/client";
 
