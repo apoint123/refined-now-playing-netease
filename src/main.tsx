@@ -14,7 +14,7 @@ import {
 	waitForElement,
 	waitForElementAsync,
 } from "./utils";
-import "./refined-control-bar.js";
+import "./refined-control-bar";
 import {
 	Hct,
 	QuantizerCelebi,
