@@ -25,7 +25,7 @@ import { Background } from "./background";
 import {
 	compatibilityWizard,
 	hijackFailureNoticeCheck,
-} from "./compatibility-check.js";
+} from "./compatibility-check";
 import { showContextMenu } from "./context-menu.js";
 import { CoverShadow } from "./cover-shadow";
 import { FontSettings } from "./font-settings.js";
