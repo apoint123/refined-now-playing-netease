@@ -29,7 +29,7 @@ import {
 import { showContextMenu } from "./context-menu";
 import { CoverShadow } from "./cover-shadow";
 import { FontSettings } from "./font-settings";
-import { Lyrics } from "./lyrics.js";
+import { Lyrics } from "./lyrics";
 import { MiniSongInfo } from "./mini-song-info";
 import { ProgressbarPreview } from "./progressbar-preview";
 import { whatsNew } from "./whats-new";
@@ -764,6 +764,7 @@ const addSettingsMenu = async (isFM = false) => {
 				true,
 				(x) => {
 					document.dispatchEvent(
+						// @ts-expect-error
 						new CustomEvent("rnp-cover-shadow-type", {
 							detail: { type: x ? "colorful" : "black" },
 						}),
@@ -801,6 +802,7 @@ const addSettingsMenu = async (isFM = false) => {
 				(x) => `rnp-bg-${x}`,
 				(x) => {
 					document.dispatchEvent(
+						// @ts-expect-error
 						new CustomEvent("rnp-background-type", { detail: { type: x } }),
 					);
 				},
@@ -1013,6 +1015,7 @@ const addSettingsMenu = async (isFM = false) => {
 				(x) => `rnp-karaoke-animation-${x}`,
 				(x) => {
 					document.dispatchEvent(
+						// @ts-expect-error
 						new CustomEvent("rnp-karaoke-animation", { detail: x }),
 					);
 				},

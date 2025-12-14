@@ -114,6 +114,8 @@ declare global {
 
 		/** 当前主题模式 (dark/light) */
 		mdThemeType?: "dark" | "light";
+
+		generateGPTTranslation?: () => Promise<void>;
 	}
 
 	const BETTERNCM_API_KEY: Window["BETTERNCM_API_KEY"];

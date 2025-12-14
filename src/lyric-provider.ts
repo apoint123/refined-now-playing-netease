@@ -1,7 +1,7 @@
 import { type LyricLine, parseLyric } from "./liblyric/index";
 import { cyrb53 } from "./utils";
 
-interface ExtendedLyricLine extends LyricLine {
+export interface ExtendedLyricLine extends LyricLine {
 	isInterlude?: boolean;
 	unsynced?: boolean;
 }
@@ -17,7 +17,7 @@ interface ArtistMeta {
 	artistId: number;
 }
 
-interface LyricRole {
+export interface LyricRole {
 	roleName: string;
 	artistMetaList: ArtistMeta[];
 }
