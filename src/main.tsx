@@ -27,7 +27,7 @@ import {
 	hijackFailureNoticeCheck,
 } from "./compatibility-check.js";
 import { showContextMenu } from "./context-menu.js";
-import { CoverShadow } from "./cover-shadow.js";
+import { CoverShadow } from "./cover-shadow";
 import { FontSettings } from "./font-settings.js";
 import { Lyrics } from "./lyrics.js";
 import { MiniSongInfo } from "./mini-song-info.js";

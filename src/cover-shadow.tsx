@@ -1,23 +1,31 @@
 import { getSetting } from "./utils";
 
-const useState = React.useState;
-const useEffect = React.useEffect;
+const React = window.React;
+const { useState, useEffect } = React;
 
-const getCoverType = () => {
+interface CoverShadowProps {
+	image: HTMLImageElement;
+}
+
+interface CoverShadowTypeEventDetail {
+	type?: string;
+}
+
+const getCoverType = (): "colorful" | "black" => {
 	const type = getSetting("cover-blurry-shadow", "true");
-	if (type == "true") {
+	if (String(type) === "true") {
 		return "colorful";
 	} else {
 		return "black";
 	}
 };
 
-export function CoverShadow(props) {
-	const [type, setType] = useState(getCoverType()); // black and colorful
-	const [rectangleCover, setRectangleCover] = useState(
-		getSetting("rectangle-cover", true),
+export function CoverShadow(props: CoverShadowProps) {
+	const [type, setType] = useState<string>(getCoverType()); // "black" | "colorful"
+	const [rectangleCover, setRectangleCover] = useState<boolean>(
+		Boolean(getSetting("rectangle-cover", true)),
 	);
-	const [url, setUrl] = useState("");
+	const [url, setUrl] = useState<string>("");
 
 	const image = props.image;
 
@@ -29,15 +37,17 @@ export function CoverShadow(props) {
 			}
 		});
 		observer.observe(image, { attributes: true, attributeFilter: ["src"] });
+
 		const onload = () => {
 			setUrl(image.src);
 		};
 		image.addEventListener("load", onload);
+
 		return () => {
 			observer.disconnect();
 			image.removeEventListener("load", onload);
 		};
-	}, [image]);
+	}, [image, url]);
 
 	useEffect(() => {
 		const observer = new MutationObserver(() => {
@@ -54,9 +64,15 @@ export function CoverShadow(props) {
 	}, []);
 
 	useEffect(() => {
-		document.addEventListener("rnp-cover-shadow-type", (e) => {
-			setType(e.detail.type ?? "colorful");
-		});
+		const handleShadowType = (e: Event) => {
+			const customEvent = e as CustomEvent<CoverShadowTypeEventDetail>;
+			setType(customEvent.detail.type ?? "colorful");
+		};
+
+		document.addEventListener("rnp-cover-shadow-type", handleShadowType);
+		return () => {
+			document.removeEventListener("rnp-cover-shadow-type", handleShadowType);
+		};
 	}, []);
 
 	if (!url) return null;
