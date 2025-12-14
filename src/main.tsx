@@ -21,7 +21,7 @@ import {
 	Score,
 	themeFromSourceColor,
 } from "@importantimport/material-color-utilities";
-import { Background } from "./background.js";
+import { Background } from "./background";
 import {
 	compatibilityWizard,
 	hijackFailureNoticeCheck,
