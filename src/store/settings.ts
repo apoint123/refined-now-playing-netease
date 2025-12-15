@@ -123,6 +123,16 @@ export const lyricContributorsDisplayAtom = atomWithPluginSetting<
 	"show" | "hover" | "hide"
 >("lyric-contributors-display", "hover");
 
+export const showTranslationAtom = atomWithPluginSetting(
+	"show-translation",
+	true,
+);
+export const showRomajiAtom = atomWithPluginSetting("show-romaji", true);
+export const useKaraokeLyricsAtom = atomWithPluginSetting(
+	"use-karaoke-lyrics",
+	true,
+);
+
 // ==================== 字体 ====================
 export const customFontAtom = atomWithPluginSetting("custom-font", false);
 export const customFontFamilyAtom = atomWithPluginSetting<string[]>(
